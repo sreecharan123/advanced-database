@@ -1,44 +1,31 @@
-from bottle import route, post, run, template, redirect, request
+from bottle import Bottle, template, redirect, request
+from database import initialize_database, Category, Task
 
-import database
+app = Bottle()
 
-@route("/")
+# Initialize the database
+initialize_database()
+
+@app.route("/")
 def get_index():
-    redirect("/list")
+    return redirect("/list")
 
-@route("/list")
+@app.route("/list")
 def get_list():
-    items = database.get_items()
-    return template("list.tpl", shopping_list=items)
+    tasks = Task.select()
+    return template("list.html", task_list=tasks)
 
-@route("/add")
+@app.route("/add", method="GET")
 def get_add():
-    return template("add_item.tpl")
+    categories = Category.select()
+    return template("add_task.html", categories=categories)
 
-@post("/add")
+@app.route("/add", method="POST")
 def post_add():
     description = request.forms.get("description")
-    database.add_item(description)
-    redirect("/list")
+    category_id = request.forms.get("category")
+    Task.create(description=description, category=category_id)
+    return redirect("/list")
 
-@route("/delete/<id>")
-def get_delete(id):
-    database.delete_item(id)
-    redirect("/list")
-
-@route("/update/<id>")
-def get_update(id):
-    items = database.get_items(id)
-    if len(items) != 1:
-        redirect("/list")
-    description = items[0]['description']
-    return template("update_item.tpl", id=id, description=description)
-
-@post("/update")
-def post_update():
-    description = request.forms.get("description")
-    id = request.forms.get("id")
-    database.update_item(id, description)
-    redirect("/list")
-
-run(host='0.0.0.0', port=8080)
+if __name__ == "__main__":
+    app.run(host='localhost', port=8080, debug=True)

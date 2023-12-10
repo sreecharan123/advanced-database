@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Task</title>
+</head>
+<body>
+    <h1>Update Task</h1>
+
+    <form action="/update/{{ task.id }}" method="post">
+        <label for="description">Task Description:</label>
+        <input type="text" name="description" value="{{ task.description }}" required>
+        <br>
+        <label for="category">Select Category:</label>
+        <select name="category" id="category" required>
+            % for category in categories:
+                <option value="{{ category.id }}" {{ "selected" if category.id == task.category.id else "" }}>{{ category.name }}</option>
+            % end
+        </select>
+        <br>
+        <button type="submit">Update Task</button>
+    </form>
+
+    <a href="/list">Back to Task List</a>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task</title>
+</head>
+<body>
+    <h1>Add Task</h1>
+
+    <!-- Add Task Form -->
+    <form method="post" action="/add">
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required>
+        
+        <label for="category">Category:</label>
+        <select id="category" name="category">
+            % for category in categories:
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            % end
+        </select>
+
+        <button type="submit">Add Task</button>
+    </form>
+
+    <a href="/list">Back to Task List</a>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+</head>
+<body>
+    <h1>Task List</h1>
+
+    <form action="/list" method="get">
+        <label for="category">Select Category:</label>
+        <select name="category" id="category">
+            <option value="">All Categories</option>
+            % for category in category_list:
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            % end
+        </select>
+        <button type="submit">Search</button>
+    </form>
+
+    <ul>
+        <h4>list of tasks</h4>
+        % for task in task_list:
+            <li>{{ task.description }}</li>
+        % end
+    </ul>
+    
+
+<ul>
+    <h4>tasks withs its categories using join</h4>
+    % for task in task_list:
+        <li>
+            {{ task.description }} (Category: {{ task.category.name }})
+            [<a href="/update/{{ task.id }}">Update</a>] 
+            [<a href="/delete/{{ task.id }}" onclick="return confirm('Are you sure you want to delete this task?')">Delete</a>]
+        </li>
+    % end
+</ul>
+
+<!-- ... (existing code) -->
+
+
+    <a href="/list_categories">View Category List</a>
+    <br>
+    <a href="/add">Add Task</a>
+</body>
+</html>
